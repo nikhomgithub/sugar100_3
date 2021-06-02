@@ -1,0 +1,30 @@
+version: '3'
+services:
+  serversugar:
+    container_name: myserversugar
+    restart: always
+    build: ./server1
+    ports:
+      - '3001:3001'
+    environment:
+      - MONGO_URI=mongodb://mongosugar:27017/vrpsugar
+      - PORT=3001
+      - JWT_SECRET=jwtSecret
+    volumes:
+      - ./server1/upload:/usr/src/app/upload
+      - ./server1/data/backupData:/usr/src/app/data/backupData
+    links:
+      - mongosugar
+  mongosugar:
+    container_name: mymongosugar
+    restart: always
+    image: mongo
+    ports:
+      - '27017:27017'
+    volumes:
+      - ./mongo/mydb:/data/db
+
+networks: 
+  default: 
+    external: 
+      name: external-network-sugar
